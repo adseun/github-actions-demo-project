@@ -27,7 +27,6 @@ jobs:
 
       - name: Pull Repository
         run: ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "
-          cd /home/demo &&
           git fetch origin &&
           git checkout ${{ secrets.MAIN_BRANCH }} &&
           git pull origin ${{ secrets.MAIN_BRANCH }}"
