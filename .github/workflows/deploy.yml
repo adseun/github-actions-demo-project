@@ -20,9 +20,7 @@ jobs:
 
       - name: Initialize Repository if Missing
         run: ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "
-          mkdir -p /home/demo &&
-          cd /home/demo &&
-          if [ ! -d .git ]; then 
+            if [ ! -d .git ]; then 
             git init && 
             git remote add origin https://github.com/adseun/github-actions-demo-project/;
           fi"
