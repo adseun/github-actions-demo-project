@@ -10,8 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          node-version: 20
 
       - name: Get SSH key and set permission
         run: |
@@ -19,14 +17,17 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
-      - name: Connect and Pull
-        run: ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "
-          cd / &&
-          git checkout ${{ secrets.MAIN_BRANCH }} &&
-          git pull"
 
       - name: Debug SSH
         run: ssh -vvv -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
 
+      - name: Verify Repository
+        run: ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "
+          cd /home/ &&
+          if [ ! -d .git ]; then echo 'Not a Git repository'; exit 1; fi"
 
-          
+      - name: Connect and Pull
+        run: ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "
+          cd /path/to/repository &&
+          git checkout ${{ secrets.MAIN_BRANCH }} &&
+          git pull"
